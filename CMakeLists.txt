@@ -12,6 +12,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "Build configuration: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install directory: ${CMAKE_INSTALL_PREFIX}")
+
 find_library(jemalloc_lib jemalloc) # jemalloc 5.0
 
 # additional target to perform clang-format run, requires clang-format
@@ -36,9 +37,9 @@ add_library(common STATIC ${COMMON_SOURCE_FILES})
 if(APPLE)
     find_package(glog REQUIRED)
     find_package(gflags REQUIRED)
-    target_link_libraries(common ${jemalloc_lib} glog::glog gflags)
+    target_link_libraries(common PUBLIC ${jemalloc_lib} glog::glog gflags)
 else()
-    target_link_libraries(common ${jemalloc_lib} glog gflags)
+    target_link_libraries(common PUBLIC ${jemalloc_lib} glog.a gflags.a)
 endif()
 
 add_executable(bench_tpcc bench_tpcc.cpp)
