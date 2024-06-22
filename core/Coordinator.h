@@ -28,7 +28,7 @@ public:
     workerStopFlag.store(false);
     ioStopFlag.store(false);
     LOG(INFO) << "Coordinator initializes " << context.worker_num
-              << " workers.";
+              << " workers, num io threads: " << context.io_thread_num * 2;
     workers = WorkerFactory::create_workers(id, db, context, workerStopFlag);
 
     // init sockets vector
@@ -149,7 +149,9 @@ public:
 
     count = timeToRun - warmup - cooldown;
 
-    LOG(INFO) << "average commit: " << 1.0 * total_commit / count << " abort: "
+    LOG(INFO) << "total commit: " << total_commit << " time: " << count
+              << "(s) average commit: " << 1.0 * total_commit / count
+              << " abort: "
               << 1.0 *
                      (total_abort_no_retry + total_abort_lock +
                       total_abort_read_validation) /
@@ -347,6 +349,7 @@ private:
   void pin_thread_to_core(std::thread &t) {
 #ifndef __APPLE__
     static std::size_t core_id = context.cpu_core_id;
+    // fprintf(stderr, "pin to cpu %zu\n", core_id);
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     CPU_SET(core_id++, &cpuset);
