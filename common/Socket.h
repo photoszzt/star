@@ -189,6 +189,9 @@ public:
   Listener(const char *addr, int port, int max_connections) {
     fd = socket(AF_INET, SOCK_STREAM, 0);
     CHECK(fd >= 0);
+    int opt = 1;
+    ::setsockopt(fd, SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), (char *)&opt,
+                 sizeof(opt));
     bind(addr, port);
     listen(max_connections);
   }
