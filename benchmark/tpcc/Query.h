@@ -58,7 +58,9 @@ public:
 
     query.O_OL_CNT = random.uniform_dist(5, 15);
 
-    int rbk = random.uniform_dist(1, 100);
+    // disable rollback
+    // int rbk = random.uniform_dist(1, 100);
+    int rbk = 0;
 
     for (auto i = 0; i < query.O_OL_CNT; i++) {
 
@@ -171,6 +173,7 @@ public:
     // The customer is randomly selected 60% of the time by last name (C_W_ID ,
     // C_D_ID, C_LAST) and 40% of the time by number (C_W_ID , C_D_ID , C_ID).
 
+    /*
     if (y <= 60) {
       // If y <= 60 a customer last name (C_LAST) is generated according to
       // Clause 4.3.2.3 from a non-uniform random value using the
@@ -181,10 +184,11 @@ public:
       query.C_LAST.assign(last_name);
       query.C_ID = 0;
     } else {
-      // If y > 60 a non-uniform random customer number (C_ID) is selected using
-      // the NURand(1023,1,3000) function.
-      query.C_ID = random.non_uniform_distribution(1023, 1, 3000);
-    }
+    */
+    // If y > 60 a non-uniform random customer number (C_ID) is selected using
+    // the NURand(1023,1,3000) function.
+    query.C_ID = random.non_uniform_distribution(1023, 1, 3000);
+    // }
 
     // The payment amount (H_AMOUNT) is randomly selected within [1.00 ..
     // 5,000.00].
